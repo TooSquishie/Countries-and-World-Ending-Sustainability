@@ -28,3 +28,7 @@ This dataset includes data about sustainable engery for countries from 2000-2020
 | Land Area(Km2)                                                   | Total land area in square kilometers.                                                      | land_area_square_km |
 | Latitude                                                         | Latitude of the country's centroid in decimal degrees.                                     | lat |
 | Longitude                                                        | Longitude of the country's centroid in decimal degrees.                                    | long |
+
+## Challenges
+
+There are many values missing (nulls) for many features. From what I can tell, it could be a country missing all values for a specific feature, or missing values for a given year. To handle this I will figure out what features are important to my problem and also how to fill missing values.
