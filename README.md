@@ -12,7 +12,7 @@ This dataset includes data about sustainable engery for countries from 2000-2020
 | Access to electricity (% of population)                          | The percentage of population with access to electricity.                                   | elec_access_pct |
 | Access to clean fuels for cooking                                | The percentage of the population with primary reliance on clean fuels.                     | clean_cook_fuel_pct |
 | Renewable-electricity-generating-capacity-per-capita             | Installed Renewable energy capacity per person.                                            | renew_elec_person |
-| Financial flows to developing countries (US $)                   | Aid and assistance from developed countries for clean energy projects.                     | financ_assist |
+| Financial flows to developing countries (US $)                   | Aid and assistance from developed countries for clean energy projects.                     | finance_assist |
 | Renewable energy share in the total final energy consumption (%) | Percentage of renewable energy in final energy consumption.                                | renew_elec_total_pct |
 | Electricity from fossil fuels (TWh)                              | Electricity generated from fossil fuels (coal, oil, gas) in terawatt-hours.                | fossil_elec_TWh |
 | Electricity from nuclear (TWh)                                   | Electricity generated from nuclear power in terawatt-hours.                                | nuclear_elec_TWh |
