@@ -32,3 +32,9 @@ This dataset includes data about sustainable engery for countries from 2000-2020
 ## Challenges
 
 There are many values missing (nulls) for many features. From what I can tell, it could be a country missing all values for a specific feature, or missing values for a given year. To handle this I will figure out what features are important to my problem and also how to fill missing values.
+
+![number of nulls per column](images/num_nulls.png)
+<br/>Number of null per feature.
+
+![first correlation matrix](images/first_corr_matrix.png)
+<br/>Correlation matrix of variable after removing nulls (temporary).
