@@ -179,3 +179,18 @@ Enter a country name (or type 'exit' to quit): Cuba
 🌍 Cuba is: Developing, Fossil-Reliant
 Enter a country name (or type 'exit' to quit): exit
 ```
+
+## Predictions
+
+I predicted the emissions for each country for 2020,2021, and 2022 (3 years). I did this because I wanted to use the predictions for a minigame of sorts. Using the prediction, I will see what country will be the last country standing, in the scenario that "the others" are eliminated the highest carbon emitted countries. To achieve the prediction. I first started with a linear prediction, but it was accurately representing the possible emissions. Then I moved on to a Random Forest Regressor model to handle any non-linearity. This predicted the emissions in a straight line at first, so I also predicted the features the provide a more accurate prediction as seen in the following figures. 
+
+<br/> The prediction can be found in [future_emission_predictions.csv](future_emission_predictions.csv)
+
+![India emission prediction](images/india_emit_predict.png)
+<br/>*India emission prediction*
+
+![US emission prediction](images/us_emit_predict.png)
+<br/>*US emission prediction*
+
+![Germany emission prediction](images/germany_emit_predict.png)
+<br/>*Germany emission prediction*
