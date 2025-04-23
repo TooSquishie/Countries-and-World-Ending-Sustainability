@@ -36,8 +36,10 @@ There are many values missing (nulls) for many features. From what I can tell, i
 ![number of nulls per column](images/num_nulls.png)
 <br/>Number of null per feature.
 
+## Cleaning the data
+
 ![first correlation matrix](images/first_corr_matrix.png)
-<br/>Correlation matrix of variable after removing nulls (temporary).
+<br/>Correlation matrix of variable after naivelyremoving nulls (temporary).
 
 
 AFTER REMOVING SPARSE DATA
@@ -62,3 +64,5 @@ Azerbaijan       0
 Bahrain          0
 Bangladesh       0
 ```
+
+![Correlation matrix after cleaning the data](images/final_corr_matrix.png)
