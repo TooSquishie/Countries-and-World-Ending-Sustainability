@@ -34,21 +34,64 @@ This dataset includes data about sustainable engery for countries from 2000-2020
 There are many values missing (nulls) for many features. From what I can tell, it could be a country missing all values for a specific feature, or missing values for a given year. To handle this I will figure out what features are important to my problem and also how to fill missing values.
 
 ![number of nulls per column](images/num_nulls.png)
-<br/>Number of null per feature.
+<br/>*Number of null per feature.*
+
+![first correlation matrix](images/first_corr_matrix.png)
+<br/>*Correlation matrix of variable after naively removing nulls (temporary).*
 
 ## Cleaning the data
 
-![first correlation matrix](images/first_corr_matrix.png)
-<br/>Correlation matrix of variable after naivelyremoving nulls (temporary).
+1. pop_density_square_km column were string when they should have been a numerical value. <br/>
 
+```
+globe_sustain['pop_density_square_km'] = (
+    globe_sustain['pop_density_square_km']
+    .str.replace(',', '', regex=False)
+    .astype(float)
+)
+```
 
-AFTER REMOVING SPARSE DATA
+2. The data is incredibly sparse for renew_elec_person, finance_assist, and primary_elec_equiv_to_rewew. I decided that these columns aren't too important for my task and they would be very difficult to fill while keeping the data's integrity. <br/>
+
+```
+cols_to_drop = [ 'finance_assist', 'primary_elec_equiv_to_renew', 'renew_elec_person']
+globe_sustain.drop(columns=cols_to_drop, inplace=True)
+```
+
+3. Countries that were missing all lat and long values for every year which was only French Guiana.<br/>
+
+```
+countries_to_drop = globe_sustain.groupby('country')[['lat', 'long']].apply(
+    lambda df: df.isnull().all().any()
+)
+globe_sustain = globe_sustain[~globe_sustain['country'].isin(countries_to_drop[countries_to_drop].index)]
+```
+
+4. Dropped countries was an excessive amount of missing values as seen in the following figures. I decided that any country missing more than 5 would be removed. I also noticed that almost every country was missing 3 values. I discovered that it was the year 2020 missing gdp_growth and two others. I decided to remove the year 2020 for all countries.<br/>
 
 ![Number of countries by total missing values](images/num_country_nulls.png)
+<br/>*Number of countries by total missing values before filtering*
+
+```
+missing_by_country = globe_sustain.groupby('country').apply(lambda group: group.isnull().sum())
+total_missing_per_country = missing_by_country.sum(axis=1).sort_values(ascending=False)
+print(total_missing_per_country.head(10))
+
+high_null_countries = total_missing_per_country[total_missing_per_country > 5].index
+globe_sustain = globe_sustain[~globe_sustain['country'].isin(high_null_countries)]
+```
 
 ![Number of countries by total missing values after filtering.](images/num_country_nulls_filtered.png)
+<br/>*Number of countries by total missing values after filtering*
+
+```
+globe_sustain = globe_sustain[globe_sustain['year'] != 2020]
+```
 
 ![Number of countries by total missing values after removing 2020.](images/num_country_null_post2020.png)
+<br/>*Number of countries by total missing values after removing 2020*
+
+5. Qatar was missing 1 value and Guinea-Bissau was missing 2. I used the mean of the missing value column for that country to fill.<br/>
 
 ```
 Top 10 countries by total missing values after dropping 2020:
@@ -63,6 +106,18 @@ Austria          0
 Azerbaijan       0
 Bahrain          0
 Bangladesh       0
+```
+
+<br/>
+
+```
+countries_to_fill = ['Guinea-Bissau', 'Qatar']
+for country in countries_to_fill:
+    country_mask = globe_sustain['country'] == country
+    for col in globe_sustain.columns:
+        if globe_sustain[col].dtype in ['float64', 'int64'] and col != 'year':
+            mean_val = globe_sustain.loc[country_mask, col].mean()
+            globe_sustain.loc[country_mask, col] = globe_sustain.loc[country_mask, col].fillna(mean_val)
 ```
 
 ![Correlation matrix after cleaning the data](images/final_corr_matrix.png)
