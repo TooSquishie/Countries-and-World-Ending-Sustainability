@@ -2,49 +2,108 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-globe_sustain = pd.read_csv("C:\\Users\\Derek\\Documents\\code_python\\Datamining\\ASSn2\\global-data-on-sustainable-energy_renamed.csv")
+# === Load Dataset ===
+globe_sustain = pd.read_csv("PATH TO CSV")
 
 print(globe_sustain.info())
 print(globe_sustain.head())
-print(globe_sustain['pop_density_square_km'].isnull().sum())
 
-# Set the target variable
-target = globe_sustain['carbon_emit_m_tons']
+# === Clean Population Density Column (convert from string with commas) ===
+globe_sustain['pop_density_square_km'] = (
+    globe_sustain['pop_density_square_km']
+    .str.replace(',', '', regex=False)
+    .astype(float)
+)
 
-# Set the feature variables
-features = globe_sustain.drop('carbon_emit_m_tons', axis=1)
+# === Drop Sparse Columns ===
+cols_to_drop = [ 'finance_assist', 'primary_elec_equiv_to_renew', 'renew_elec_person']
+globe_sustain.drop(columns=cols_to_drop, inplace=True)
+print("\nDropped columns with excessive null values:", cols_to_drop)
 
-# For handling null values
-# https://www.youtube.com/watch?v=9ARreeMweNM
+# === Drop Countries Missing lat/long for All Years ===
+countries_to_drop = globe_sustain.groupby('country')[['lat', 'long']].apply(
+    lambda df: df.isnull().all().any()
+)
 
-null_counts = globe_sustain.isnull().sum()
+# Just French Guiana
+globe_sustain = globe_sustain[~globe_sustain['country'].isin(countries_to_drop[countries_to_drop].index)]
+print("Dropping countries with missing lat/long for all years:")
+print(countries_to_drop[countries_to_drop].index.tolist())
 
-globe_sustain['pop_density_square_km'] = globe_sustain['pop_density_square_km'].str.replace(',', '')
-globe_sustain['pop_density_square_km'] = pd.to_numeric(globe_sustain['pop_density_square_km'], errors='coerce')
+# === Analyze Missing Values by Country ===
+missing_by_country = globe_sustain.groupby('country').apply(lambda group: group.isnull().sum())
+total_missing_per_country = missing_by_country.sum(axis=1).sort_values(ascending=False)
+print(total_missing_per_country.head(10))
+
+# === Drop Countries with >5 Missing Values ===
+high_null_countries = total_missing_per_country[total_missing_per_country > 5].index
+globe_sustain = globe_sustain[~globe_sustain['country'].isin(high_null_countries)]
+print(f"\nDropped {len(high_null_countries)} countries with >5 missing values.")
+
+# === Recalculate total missing values per country AFTER filtering ===
+filtered_missing_by_country = globe_sustain.groupby('country').apply(lambda group: group.isnull().sum())
+filtered_total_missing_per_country = filtered_missing_by_country.sum(axis=1)
+filtered_missing_counts = filtered_total_missing_per_country.value_counts().sort_index()
+
+# === Plot Updated Distribution ===
+# plt.figure(figsize=(10, 6))
+# filtered_missing_counts.plot(kind='bar')
+# plt.title('Number of Countries by Total Missing Values (After Filtering)')
+# plt.xlabel('Total Missing Values')
+# plt.ylabel('Number of Countries')
+# plt.tight_layout()
+# plt.show()
+
+# === Plot Distribution of Missing Values per Country ===
+# missing_counts = total_missing_per_country.value_counts().sort_index()
+# plt.figure(figsize=(10, 6))
+# missing_counts.plot(kind='bar')
+# plt.title('Number of Countries by Total Missing Values')
+# plt.xlabel('Total Missing Values')
+# plt.ylabel('Number of Countries')
+# plt.tight_layout()
+# plt.show()
+
+# === Final Null Check ===
+print("\nRemaining missing values per column:")
+print(globe_sustain.isnull().sum())
+
+# === Export the almost cleaned  ===
+#globe_sustain.to_csv("almost_cleaned_global_sustainability.csv", index=False)
+
+#print("Cleaned data exported to 'almost_cleaned_global_sustainability.csv'")
 
 
-null_counts.plot(kind='bar')
-plt.title('Number of Null Values per Column')
-plt.xlabel('Column Name')
-plt.ylabel('Number of Nulls')
-plt.tight_layout()  # Optional: Adjusts layout to prevent label cut-off
-plt.show()
+# Drop 2020 data
+globe_sustain = globe_sustain[globe_sustain['year'] != 2020]
 
-testdf = globe_sustain.drop(columns=['country'],axis=1, inplace=False).copy() 
-# Dropping nulls before final filling
-clean_df = testdf.dropna()
-correlation_matrix = clean_df.corr()
+print("\nDropped all rows from year 2020.")
 
-print(clean_df.info())
+# Recalculate missing values after dropping 2020
+missing_by_country = globe_sustain.groupby('country').apply(lambda group: group.isnull().sum())
+total_missing_per_country = missing_by_country.sum(axis=1).sort_values(ascending=False)
 
-# Assuming df is your DataFrame and 'target' is your target variable
-correlation_matrix = clean_df.corr(method='pearson') # or 'spearman'
+print("\nTop 10 countries by total missing values after dropping 2020:")
+print(total_missing_per_country.head(10))
 
-# Print correlations with the target variable
-print(correlation_matrix['carbon_emit_m_tons'].sort_values(ascending=False))
+missing_counts = total_missing_per_country.value_counts().sort_index()
 
-plt.figure(figsize=(12,10))
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
-plt.title('Correlation Matrix')
-plt.tight_layout() 
-plt.show()
+# === Plot Distribution of Missing Values per Country After Removing 2020 ===
+# missing_counts = total_missing_per_country.value_counts().sort_index()
+# plt.figure(figsize=(10, 6))
+# missing_counts.plot(kind='bar')
+# plt.title('Number of Countries by Total Missing Values (After Dropping 2020)')
+# plt.xlabel('Total Missing Values')
+# plt.ylabel('Number of Countries')
+# plt.tight_layout()
+# plt.show()
+
+# === Fill remaining nulls using column-wise mean ===
+globe_sustain = globe_sustain.fillna(globe_sustain.mean(numeric_only=True))
+
+print("\nAll remaining missing values filled with column means.")
+print(globe_sustain.isnull().sum())  # Just to confirm
+
+# === Save to file ===
+# globe_sustain.to_csv("cleaned_global_sustainability.csv", index=False)
+print("Exported to 'cleaned_global_sustainability.csv'")

@@ -38,3 +38,27 @@ There are many values missing (nulls) for many features. From what I can tell, i
 
 ![first correlation matrix](images/first_corr_matrix.png)
 <br/>Correlation matrix of variable after removing nulls (temporary).
+
+
+AFTER REMOVING SPARSE DATA
+
+![Number of countries by total missing values](images/num_country_nulls.png)
+
+![Number of countries by total missing values after filtering.](images/num_country_nulls_filtered.png)
+
+![Number of countries by total missing values after removing 2020.](images/num_country_null_post2020.png)
+
+```
+Top 10 countries by total missing values after dropping 2020:
+country
+Guinea-Bissau    2
+Qatar            1
+Algeria          0
+Angola           0
+Armenia          0
+Australia        0
+Austria          0
+Azerbaijan       0
+Bahrain          0
+Bangladesh       0
+```
