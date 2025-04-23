@@ -1,7 +1,7 @@
 # Countries-and-World-Ending-Sustainability
 How can I help save the world from "the Others"
 
-Data: Uncover this dataset showcasing sustainable energy indicators and other useful factors across all countries from 2000 to 2020. Dive into vital aspects such as electricity access, renewable energy, carbon emissions, energy intensity, Financial flows, and economic growth. Compare nations, track progress towards Sustainable Development Goal 7, and gain profound insights into global energy consumption patterns over time.- [Kaggle: Global Data on Sustainability Energy](https://www.kaggle.com/datasets/anshtanwar/global-data-on-sustainable-energy)
+Data: "Uncover this dataset showcasing sustainable energy indicators and other useful factors across all countries from 2000 to 2020. Dive into vital aspects such as electricity access, renewable energy, carbon emissions, energy intensity, Financial flows, and economic growth. Compare nations, track progress towards Sustainable Development Goal 7, and gain profound insights into global energy consumption patterns over time." - [Kaggle: Global Data on Sustainability Energy](https://www.kaggle.com/datasets/anshtanwar/global-data-on-sustainable-energy)
 
 This dataset includes data about sustainable engery for countries from 2000-2020. 
 
@@ -41,7 +41,7 @@ There are many values missing (nulls) for many features. From what I can tell, i
 
 ## Cleaning the data
 
-1. pop_density_square_km column values were string when they should have been a numerical value. <br/>
+1. pop_density_square_km column values were strings when they should have been a numerical value. <br/>
 
 ```
 globe_sustain['pop_density_square_km'] = (
