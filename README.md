@@ -5,7 +5,7 @@ Data: Uncover this dataset showcasing sustainable energy indicators and other us
 
 This dataset includes data about sustainable engery for countries from 2000-2020. 
 
-| Feature                                                          | Description                                                                                | Renamed Feature|
+| Feature                                                          | Description                                                                                | Renamed Feature |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
 | Entity                                                           | The name of the country or region for which the data is reported.                          | country |
 | Year                                                             | The year for which the data is reported, ranging from 2000 to 2020.                        | year |
@@ -122,3 +122,60 @@ for country in countries_to_fill:
 
 ![Correlation matrix after cleaning the data](images/final_corr_matrix.png)
 <br/>*Correlation matrix of variable after cleaning the data and retaining data integrity*
+
+## Clustering
+
+I chose to cluster by these 8 features to see what certain countries may be categorized as.
+
+1. Renewables %
+2. Fossil TWh
+3. Nuclear TWh
+4. Elec per GDP
+5. GDP per Capita
+6. Elec/Person (kWh)
+7. Low Carbon Elec %
+8. CO₂ Emissions (tons)
+
+![Cluster map](images/clustermap.png)
+<br/>*Countries clusters based off 8 features*
+
+![Cluster map zoomed to cluster 0](images/Cluster0_map.png)
+<br/>*Cluster 0*
+
+![Cluster map zoomed to cluster 1](images/Cluster1_map.png)
+<br/>*Cluster 1*
+
+![Cluster map zoomed to cluster 2](images/Cluster2_map.png)
+<br/>*Cluster 2*
+
+![Cluster map zoomed to cluster 3](images/Cluster3_map.png)
+<br/>*Cluster 3*
+
+This table shows the aggregated values for the clusters for each feature. 
+
+| Cluster | Description | Renewables % | Fossil TWh | Nuclear TWh | Elec per GDP | GDP per Capita | Elec/Person (kWh) | Low Carbon Elec % | CO₂ Emissions (tons) |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
+| 0 | Low Emission, Low GDP, High Renewables | 71.60 | 3.03 | 0.30 | 6.52 | 1,952.57 | 4,326.20 | 64.95 | 16,412 |
+| 1 | Wealthy Balanced Energy Users | 16.63 | 91.63 | 43.41 | 5.56 | 46,117.99 | 88,740.15 | 43.29 | 196,325 |
+| 2 | Mega Emitters (US/China) | 12.00 | 2,949.08 | 451.39 | 7.19 | 27,098.10 | 52,392.14 | 26.69 | 6,483,090 |
+| 3 | Developing, Fossil-Reliant | 19.73 | 39.93 | 3.48 | 4.61 | 7,939.01 | 18,861.60 | 23.80 | 83,755 |
+
+Since there are 8 features, I had to reduce the dimensionality to view on a map. To achieve this, I used [sklearn principle component analysis](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html). This made it a little difficult to understand the map, but going to the right looks like it means higher emission, fossil fuel, and GDP. Going up looks like it may be more renewable energy.
+
+```
+Enter a country name (or type 'exit' to quit): China
+🌍 China is: Mega Emitters (US/China)
+Enter a country name (or type 'exit' to quit): Sri Lanka
+🌍 Sri Lanka is: Low Emission, Low GDP, High Renewables
+Enter a country name (or type 'exit' to quit): Mexico
+🌍 Mexico is: Developing, Fossil-Reliant
+Enter a country name (or type 'exit' to quit): India
+🌍 India is: Developing, Fossil-Reliant
+Enter a country name (or type 'exit' to quit): Japan
+🌍 Japan is: Wealthy Balanced Energy Users
+Enter a country name (or type 'exit' to quit): Germany
+🌍 Germany is: Wealthy Balanced Energy Users
+Enter a country name (or type 'exit' to quit): Cuba
+🌍 Cuba is: Developing, Fossil-Reliant
+Enter a country name (or type 'exit' to quit): exit
+```
