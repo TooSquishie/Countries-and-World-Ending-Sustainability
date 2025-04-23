@@ -182,9 +182,9 @@ Enter a country name (or type 'exit' to quit): exit
 
 ## Predictions
 
-I predicted the emissions for each country for 2020,2021, and 2022 (3 years). I did this because I wanted to use the predictions for a minigame of sorts. Using the prediction, I will see what country will be the last country standing, in the scenario that "the others" are eliminated the highest carbon emitted countries. To achieve the prediction. I first started with a linear prediction, but it was accurately representing the possible emissions. Then I moved on to a Random Forest Regressor model to handle any non-linearity. This predicted the emissions in a straight line at first, so I also predicted the features the provide a more accurate prediction as seen in the following figures. 
+I predicted the emissions for each country for 2020, 2021, and 2022 (3 years). I did this because I wanted to use the predictions for a minigame of sorts. Using the prediction, I will see what country will be the last country standing, in the scenario that "the others" are eliminating the highest carbon emitted countries. To achieve the prediction. I first started with a linear prediction, but it was inaccurately representing the possible emissions. Then I moved on to a Random Forest Regressor model to handle any non-linearity. This predicted the emissions in a straight horizontal line at first, so I also projected the features to provide a more accurate prediction as seen in the following figures. 
 
-<br/> The prediction can be found in [future_emission_predictions.csv](future_emission_predictions.csv)
+<br/> The predictions can be found in [future_emission_predictions.csv](future_emission_predictions.csv)
 
 ![India emission prediction](images/india_emit_predict.png)
 <br/>*India emission prediction*
@@ -199,7 +199,7 @@ I predicted the emissions for each country for 2020,2021, and 2022 (3 years). I 
 
 The Others are coming...
 
-I used the 3 year predictions (largely with the help of ChatGPT-4o) to create a minigame that simulates which countries you should visit to last the longest against "the others" as they eliminate countries with the highest carbon emissions. Since there are 52 weeks in a year and the "the others" are eliminating 1 country a week, 52 countries will be eliminated a year. There are 140 countries after removing the countries with sparse data, so it is possible to last at least just under 3 years by choosing the best country. The following is a list of the top 10 countries that lasted the longest.
+I used the 3 year predictions to create a minigame that simulates which countries you should visit to last the longest against "the others" as they eliminate countries with the highest carbon emissions (largely with the help of ChatGPT-4o). Since there are 52 weeks in a year and the "the others" are eliminating 1 country a week, 52 countries will be eliminated a year. There are 140 countries after removing the countries with sparse data, so it is possible to last at least just under 3 years by choosing the best country. The following is a list of the top 10 countries that lasted the longest.
 
 ```
 Final 10 Countries Eliminated:
