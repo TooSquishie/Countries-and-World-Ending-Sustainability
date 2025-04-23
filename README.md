@@ -41,7 +41,7 @@ There are many values missing (nulls) for many features. From what I can tell, i
 
 ## Cleaning the data
 
-1. pop_density_square_km column were string when they should have been a numerical value. <br/>
+1. pop_density_square_km column values were string when they should have been a numerical value. <br/>
 
 ```
 globe_sustain['pop_density_square_km'] = (
@@ -51,14 +51,14 @@ globe_sustain['pop_density_square_km'] = (
 )
 ```
 
-2. The data is incredibly sparse for renew_elec_person, finance_assist, and primary_elec_equiv_to_rewew. I decided that these columns aren't too important for my task and they would be very difficult to fill while keeping the data's integrity. <br/>
+2. The data is incredibly sparse for renew_elec_person, finance_assist, and primary_elec_equiv_to_renew. I decided that these columns aren't too important for my task and they would be very difficult to fill while keeping the data's integrity. <br/>
 
 ```
 cols_to_drop = [ 'finance_assist', 'primary_elec_equiv_to_renew', 'renew_elec_person']
 globe_sustain.drop(columns=cols_to_drop, inplace=True)
 ```
 
-3. Countries that were missing all lat and long values for every year which was only French Guiana.<br/>
+3. I removed countries that were missing all lat and long values for every year which was only French Guiana.<br/>
 
 ```
 countries_to_drop = globe_sustain.groupby('country')[['lat', 'long']].apply(
@@ -67,7 +67,7 @@ countries_to_drop = globe_sustain.groupby('country')[['lat', 'long']].apply(
 globe_sustain = globe_sustain[~globe_sustain['country'].isin(countries_to_drop[countries_to_drop].index)]
 ```
 
-4. Dropped countries was an excessive amount of missing values as seen in the following figures. I decided that any country missing more than 5 would be removed. I also noticed that almost every country was missing 3 values. I discovered that it was the year 2020 missing gdp_growth and two others. I decided to remove the year 2020 for all countries.<br/>
+4. Dropped countries that had an excessive amount of missing values as seen in the following figures. I decided that any country missing more than 5 would be removed. I also noticed that almost every country was missing 3 values. I discovered that it was the year 2020 missing gdp_growth and two others. I decided to remove the year 2020 for all countries.<br/>
 
 ![Number of countries by total missing values](images/num_country_nulls.png)
 <br/>*Number of countries by total missing values before filtering*
@@ -121,3 +121,4 @@ for country in countries_to_fill:
 ```
 
 ![Correlation matrix after cleaning the data](images/final_corr_matrix.png)
+<br/>*Correlation matrix of variable after cleaning the data and retaining data integrity*
