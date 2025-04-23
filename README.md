@@ -194,3 +194,30 @@ I predicted the emissions for each country for 2020,2021, and 2022 (3 years). I 
 
 ![Germany emission prediction](images/germany_emit_predict.png)
 <br/>*Germany emission prediction*
+
+## Minigame: Last Country Standing
+
+The Others are coming...
+
+I used the 3 year predictions (largely with the help of ChatGPT-4o) to create a minigame that simulates which countries you should visit to last the longest against "the others" as they eliminate countries with the highest carbon emissions. Since there are 52 weeks in a year and the "the others" are eliminating 1 country a week, 52 countries will be eliminated a year. There are 140 countries after removing the countries with sparse data, so it is possible to last at least just under 3 years by choosing the best country. The following is a list of the top 10 countries that lasted the longest.
+
+```
+Final 10 Countries Eliminated:
+country                  week_eliminated
+Solomon Islands          131
+Guinea-Bissau            132
+Grenada                  133
+Samoa                    134
+Dominica                 135
+Comoros                  136
+Vanuatu                  137
+Central African Republic 138
+Tonga                    139
+Kiribati                 140
+```
+
+![Country elimination minigame](minigame.gif)
+
+<br/> To last the longest go to one of these places and enjoy the beach while you can. 
+
+![Man sitting on beach](images/man_beach.png)

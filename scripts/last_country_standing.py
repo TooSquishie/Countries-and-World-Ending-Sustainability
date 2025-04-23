@@ -61,7 +61,7 @@ legend_elements = [
         Patch(facecolor='black', label='Not in dataset'),
     ]
 
-# === Generate 156 maps ===
+# === Generate 140 maps ===
 for week in range(1, len(eliminated) + 1):
     world['status'] = world.apply(lambda row: get_status(row, week), axis=1)
 
