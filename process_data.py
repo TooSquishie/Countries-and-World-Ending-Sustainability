@@ -3,10 +3,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # === Load Dataset ===
-globe_sustain = pd.read_csv("PATH TO CSV")
+globe_sustain = pd.read_csv("C:\\Users\\Derek\\Documents\\code_python\\Datamining\\ASSn2\\global-data-on-sustainable-energy_renamed.csv")
 
-print(globe_sustain.info())
-print(globe_sustain.head())
+#print(globe_sustain.info())
+#print(globe_sustain.head())
 
 # === Clean Population Density Column (convert from string with commas) ===
 globe_sustain['pop_density_square_km'] = (
@@ -65,8 +65,8 @@ filtered_missing_counts = filtered_total_missing_per_country.value_counts().sort
 # plt.show()
 
 # === Final Null Check ===
-print("\nRemaining missing values per column:")
-print(globe_sustain.isnull().sum())
+#print("\nRemaining missing values per column:")
+#print(globe_sustain.isnull().sum())
 
 # === Export the almost cleaned  ===
 #globe_sustain.to_csv("almost_cleaned_global_sustainability.csv", index=False)
@@ -83,8 +83,8 @@ print("\nDropped all rows from year 2020.")
 missing_by_country = globe_sustain.groupby('country').apply(lambda group: group.isnull().sum())
 total_missing_per_country = missing_by_country.sum(axis=1).sort_values(ascending=False)
 
-print("\nTop 10 countries by total missing values after dropping 2020:")
-print(total_missing_per_country.head(10))
+#print("\nTop 10 countries by total missing values after dropping 2020:")
+#print(total_missing_per_country.head(10))
 
 missing_counts = total_missing_per_country.value_counts().sort_index()
 
@@ -98,12 +98,33 @@ missing_counts = total_missing_per_country.value_counts().sort_index()
 # plt.tight_layout()
 # plt.show()
 
-# === Fill remaining nulls using column-wise mean ===
-globe_sustain = globe_sustain.fillna(globe_sustain.mean(numeric_only=True))
-
-print("\nAll remaining missing values filled with column means.")
-print(globe_sustain.isnull().sum())  # Just to confirm
+# === Fill using per-country column means ===
+# List of countries that still have missing values
+countries_to_fill = ['Guinea-Bissau', 'Qatar']
+for country in countries_to_fill:
+    country_mask = globe_sustain['country'] == country
+    for col in globe_sustain.columns:
+        if globe_sustain[col].dtype in ['float64', 'int64'] and col != 'year':
+            mean_val = globe_sustain.loc[country_mask, col].mean()
+            globe_sustain.loc[country_mask, col] = globe_sustain.loc[country_mask, col].fillna(mean_val)
 
 # === Save to file ===
-# globe_sustain.to_csv("cleaned_global_sustainability.csv", index=False)
+globe_sustain.to_csv("cleaned_global_sustainability.csv", index=False)
 print("Exported to 'cleaned_global_sustainability.csv'")
+
+# === Drop non-numeric columns for correlation ===
+corr_df = globe_sustain.drop(columns=['country'], axis=1)
+
+# === Calculate correlation matrix ===
+correlation_matrix = corr_df.corr(method='pearson')  # or use 'spearman' if needed
+
+# === Print correlation with target variable ===
+#print("\nCorrelation with 'carbon_emit_m_tons':")
+#print(correlation_matrix['carbon_emit_m_tons'].sort_values(ascending=False))
+
+# === Plot full heatmap ===
+plt.figure(figsize=(12, 10))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title('Correlation Matrix')
+plt.tight_layout()
+plt.show()
